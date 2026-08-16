@@ -324,7 +324,7 @@
                         <div class="page-head-row">
                             <div>
                                 <div class="eyebrow">Personal Banking</div>
-                                <h2>Good morning, Mariah.</h2>
+                                <h2 id="greetingText">Good morning, Mariah.</h2>
                                 <div class="sub">Here is your account overview.</div>
                             </div>
                             <button class="btn-cta" onclick="openTransferPage()"><i class="fas fa-paper-plane"></i> Transfer Money</button>
@@ -367,11 +367,11 @@
                             </div>
                             <div class="card-panel">
                                 <div class="panel-title">Cash flow</div>
-                                <div class="panel-sub">Last 6 months</div>
+                                <div class="panel-sub" id="cashflowSub">Last 6 months</div>
                                 <div class="chart-container"><canvas id="cashflowChart"></canvas></div>
                                 <div class="cf-legend">
-                                    <div class="item"><span class="swatch" style="background:var(--primary);"></span>Income <strong>$83,420</strong></div>
-                                    <div class="item"><span class="swatch" style="background:#c7d7ef;"></span>Spending <strong>$31,286</strong></div>
+                                    <div class="item"><span class="swatch" style="background:var(--primary);"></span>Income <strong id="incomeValue">$83,420</strong></div>
+                                    <div class="item"><span class="swatch" style="background:#c7d7ef;"></span>Spending <strong id="spendingValue">$31,286</strong></div>
                                 </div>
                             </div>
                         </div>
@@ -545,6 +545,7 @@
         const spendCategories = { Housing: 46, Food: 24, Utilities: 12, Travel: 10, Shopping: 8 };
 
         let cashflowChartInstance = null;
+        let liveChartInterval = null;
 
         // ============================================================
         // HELPERS
@@ -563,6 +564,18 @@
             if (type === 'income') return 'fas fa-arrow-down';
             if (type === 'expense') return 'fas fa-arrow-up';
             return 'fas fa-right-left';
+        }
+
+        // ============================================================
+        // DYNAMIC GREETING
+        // ============================================================
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            let greeting = 'Good morning';
+            if (hour >= 12 && hour < 18) greeting = 'Good afternoon';
+            else if (hour >= 18) greeting = 'Good evening';
+            const el = document.getElementById('greetingText');
+            if (el) el.innerText = `${greeting}, Mariah.`;
         }
 
         // ============================================================
@@ -586,6 +599,10 @@
             document.getElementById('loginPage').style.display = 'block';
             document.getElementById('dashboardPage').style.display = 'none';
             resetTransferFlow();
+            if (liveChartInterval) {
+                clearInterval(liveChartInterval);
+                liveChartInterval = null;
+            }
         }
 
         function handleLogoutCancelTransfer() {
@@ -601,11 +618,13 @@
         // DASHBOARD INIT
         // ============================================================
         function initDashboard() {
+            updateGreeting();
             renderTransactions('recentTxList', transactions.slice(0, 6));
             renderTransactions('fullTxList', transactions);
             renderSpendBars();
             renderCashflowChart();
             updateDashboard();
+            startLiveChartUpdate();
         }
 
         function updateDashboard() {
@@ -645,7 +664,7 @@
         }
 
         // ============================================================
-        // CASH FLOW CHART (line)
+        // CASH FLOW CHART (line) with live update
         // ============================================================
         function renderCashflowChart() {
             const canvas = document.getElementById('cashflowChart');
@@ -690,6 +709,36 @@
                     }
                 }
             });
+        }
+
+        function startLiveChartUpdate() {
+            if (liveChartInterval) clearInterval(liveChartInterval);
+            liveChartInterval = setInterval(() => {
+                const chart = cashflowChartInstance;
+                if (!chart) return;
+                const incomeData = chart.data.datasets[0].data;
+                const spendingData = chart.data.datasets[1].data;
+                if (incomeData.length > 0 && spendingData.length > 0) {
+                    const lastIncome = incomeData[incomeData.length - 1];
+                    const lastSpending = spendingData[spendingData.length - 1];
+                    // Shift
+                    incomeData.shift();
+                    spendingData.shift();
+                    // Generate new values with fluctuation
+                    const newIncome = Math.max(50000, Math.round(lastIncome + (Math.random() - 0.45) * 6000));
+                    const newSpending = Math.max(15000, Math.round(lastSpending + (Math.random() - 0.45) * 4000));
+                    incomeData.push(newIncome);
+                    spendingData.push(newSpending);
+                    chart.update('none');
+                    // Update legend values
+                    const totalIncome = incomeData.reduce((a, b) => a + b, 0);
+                    const totalSpending = spendingData.reduce((a, b) => a + b, 0);
+                    const incomeEl = document.getElementById('incomeValue');
+                    const spendingEl = document.getElementById('spendingValue');
+                    if (incomeEl) incomeEl.innerText = '$' + totalIncome.toLocaleString();
+                    if (spendingEl) spendingEl.innerText = '$' + totalSpending.toLocaleString();
+                }
+            }, 3000);
         }
 
         // ============================================================
