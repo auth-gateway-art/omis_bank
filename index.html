@@ -232,6 +232,16 @@
         .simple-view p{color:var(--text-soft);font-size:14.5px;line-height:1.7;}
         .simple-view p i{color:var(--primary);margin-right:6px;}
 
+        /* Success / Pending state for transfer */
+        .success-wrap{text-align:center;padding:10px 0 4px;}
+        .success-wrap .success-icon{width:64px;height:64px;border-radius:50%;background:var(--green-bg);color:var(--green);font-size:26px;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;}
+        .success-wrap h3{font-size:21px;color:var(--navy);margin-bottom:8px;}
+        .success-wrap p.desc{font-size:13.5px;color:var(--text-soft);max-width:440px;margin:0 auto 18px;line-height:1.55;}
+        .status-line-pending{font-size:13px;color:var(--text-faint);margin-bottom:10px;}
+        .status-line-pending strong{color:var(--amber-text);}
+        .success-wrap .no-funds{font-weight:700;font-size:13.5px;color:var(--green);margin-bottom:6px;}
+        .success-wrap .no-funds i{color:var(--amber-text);}
+
         @media (max-width:1100px){
             .grid-3{grid-template-columns:1fr 1fr;}
             .quick-row{grid-template-columns:repeat(3,1fr);}
@@ -370,8 +380,8 @@
                                 <div class="panel-sub" id="cashflowSub">Last 6 months</div>
                                 <div class="chart-container"><canvas id="cashflowChart"></canvas></div>
                                 <div class="cf-legend">
-                                    <div class="item"><span class="swatch" style="background:var(--primary);"></span>Income <strong id="incomeValue">$83,420</strong></div>
-                                    <div class="item"><span class="swatch" style="background:#c7d7ef;"></span>Spending <strong id="spendingValue">$31,286</strong></div>
+                                    <div class="item"><span class="swatch" style="background:var(--primary);"></span>Contributions <strong id="incomeValue">$83,420</strong></div>
+                                    <div class="item"><span class="swatch" style="background:#c7d7ef;"></span>Withdrawals <strong id="spendingValue">$31,286</strong></div>
                                 </div>
                             </div>
                         </div>
@@ -379,7 +389,7 @@
                         <div class="grid-2">
                             <div class="card-panel">
                                 <div class="panel-title">Portfolio Allocation</div>
-                                <div class="panel-sub">Spending by category</div>
+                                <div class="panel-sub">Asset allocation by sector</div>
                                 <div id="spendBars"></div>
                             </div>
                             <div>
@@ -478,15 +488,15 @@
                                 <p id="processingStatus">Validating transfer information…</p>
                             </div>
 
-                            <!-- STEP 5: FAILED -->
-                            <div id="transferStepFailed" class="hidden">
-                                <div class="fail-wrap">
-                                    <div class="error-icon"><i class="fas fa-xmark"></i></div>
-                                    <h3>Transfer Could Not Be Completed</h3>
-                                    <p class="desc">We are unable to complete this transfer at this time. Please contact your account officer for assistance.</p>
-                                    <div class="status-line">Status: <strong>Unsuccessful</strong></div>
-                                    <div class="ref-pill" id="refPill">OMIS-TRF-000000</div>
-                                    <div class="no-funds"><i class="fas fa-circle-check" style="color:var(--green);"></i> No funds have been transferred.</div>
+                            <!-- STEP 5: SUCCESS / PENDING APPROVAL (NEW) -->
+                            <div id="transferStepPending" class="hidden">
+                                <div class="success-wrap">
+                                    <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+                                    <h3>Transfer Submitted Successfully!</h3>
+                                    <p class="desc">Your transfer request has been received and is currently <strong>pending approval</strong>. Please contact your Account Officer for final confirmation and settlement.</p>
+                                    <div class="status-line-pending">Status: <strong>Pending Approval</strong></div>
+                                    <div class="ref-pill" id="refPillSuccess">OMIS-TRF-000000</div>
+                                    <div class="no-funds"><i class="fas fa-clock"></i> Awaiting officer approval.</div>
                                     <button class="btn-primary-modal" onclick="finishTransferFlow()">Return to Dashboard <i class="fas fa-arrow-right"></i></button>
                                 </div>
                             </div>
@@ -678,7 +688,7 @@
                     labels: ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
                     datasets: [
                         {
-                            label: 'Income',
+                            label: 'Contributions',
                             data: [48000, 55000, 61000, 70000, 76000, 83420],
                             borderColor: '#0a5fc4',
                             backgroundColor: 'rgba(10,95,196,0.08)',
@@ -688,7 +698,7 @@
                             pointRadius: 0
                         },
                         {
-                            label: 'Spending',
+                            label: 'Withdrawals',
                             data: [19000, 21500, 24000, 26500, 29000, 31286],
                             borderColor: '#c7d7ef',
                             backgroundColor: 'transparent',
@@ -782,7 +792,7 @@
             document.getElementById('transferStepConfirm').classList.add('hidden');
             document.getElementById('transferStepPin').classList.add('hidden');
             document.getElementById('transferStepProcessing').classList.add('hidden');
-            document.getElementById('transferStepFailed').classList.add('hidden');
+            document.getElementById('transferStepPending').classList.add('hidden');
             document.getElementById('pinError').style.display = 'none';
             document.getElementById('tfPin').value = '';
             setStepper(1);
@@ -896,9 +906,9 @@
                 clearInterval(interval);
                 document.getElementById('transferStepProcessing').classList.add('hidden');
                 const ref = 'OMIS-TRF-' + Math.floor(100000 + Math.random() * 900000);
-                document.getElementById('refPill').textContent = ref;
-                document.getElementById('transferStepFailed').classList.remove('hidden');
-                transferStep = 'failed';
+                document.getElementById('refPillSuccess').textContent = ref;
+                document.getElementById('transferStepPending').classList.remove('hidden');
+                transferStep = 'pending';
                 // Balances remain unchanged — simulated environment only.
             }, 4000);
         }
