@@ -378,7 +378,7 @@
 
                         <div class="grid-2">
                             <div class="card-panel">
-                                <div class="panel-title">Spending overview</div>
+                                <div class="panel-title">Portfolio Allocation</div>
                                 <div class="panel-sub">Spending by category</div>
                                 <div id="spendBars"></div>
                             </div>
@@ -514,12 +514,12 @@
         let savingsBalance = 234567.00;
 
         const transactions = [
-            { id: 1, date: 'Aug 12', desc: 'Payroll Deposit', category: 'Income', amount: 18750.00, type: 'income', status: 'Completed' },
+            { id: 1, date: 'Aug 12', desc: 'Investment Income', category: 'Income', amount: 18750.00, type: 'income', status: 'Completed' },
             { id: 2, date: 'Aug 10', desc: 'Investment Distribution', category: 'Income', amount: 32500.00, type: 'income', status: 'Completed' },
-            { id: 3, date: 'Aug 8', desc: 'Internal Transfer to Savings', category: 'Transfer', amount: 10000.00, type: 'expense', status: 'Completed' },
-            { id: 4, date: 'Aug 6', desc: 'Electric Utility Payment', category: 'Utilities', amount: 286.41, type: 'expense', status: 'Completed' },
-            { id: 5, date: 'Aug 4', desc: 'Mobile Phone', category: 'Utilities', amount: 174.22, type: 'expense', status: 'Completed' },
-            { id: 6, date: 'Aug 1', desc: 'Grocery Market', category: 'Food', amount: 328.45, type: 'expense', status: 'Completed' },
+            { id: 3, date: 'Aug 8', desc: 'Capital Allocation', category: 'Transfer', amount: 10000.00, type: 'expense', status: 'Completed' },
+            { id: 4, date: 'Aug 6', desc: 'Investment Deposit', category: 'Income', amount: 8000.00, type: 'income', status: 'Completed' },
+            { id: 5, date: 'Aug 4', desc: 'Fund Deposit', category: 'Income', amount: 4000.00, type: 'income', status: 'Completed' },
+            { id: 6, date: 'Aug 1', desc: 'Capital Deduction', category: 'Investment', amount: 15000.00, type: 'expense', status: 'Completed' },
             { id: 7, date: 'Jul 29', desc: 'Insurance Premium', category: 'Insurance', amount: 1480.00, type: 'expense', status: 'Completed' },
             { id: 8, date: 'Jul 26', desc: 'Property Payment', category: 'Housing', amount: 6850.00, type: 'expense', status: 'Completed' },
             { id: 9, date: 'Jul 23', desc: 'Online Shopping', category: 'Shopping', amount: 742.19, type: 'expense', status: 'Completed' },
@@ -542,7 +542,7 @@
             { id: 26, date: 'Jun 1', desc: 'Investment Distribution', category: 'Income', amount: 75500.00, type: 'income', status: 'Completed' },
         ];
 
-        const spendCategories = { Housing: 46, Food: 24, Utilities: 12, Travel: 10, Shopping: 8 };
+        const spendCategories = { 'Real Estate': 46, 'Consumer Staples': 24, 'Infrastructure / Energy': 12, 'Technology / Growth': 10, 'Consumer Discretionary': 8 };
 
         let cashflowChartInstance = null;
         let liveChartInterval = null;
