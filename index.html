@@ -391,6 +391,9 @@
                                 <div class="panel-title">Portfolio Allocation</div>
                                 <div class="panel-sub">Asset allocation by sector</div>
                                 <div id="spendBars"></div>
+                                <div style="font-size:12px; color:var(--text-faint); margin-top:16px; padding-top:14px; border-top:1px solid var(--border);">
+                                    Cost Basis: $1,245,000.00 &nbsp;|&nbsp; Unrealized P&L: <span style="color:var(--green); font-weight:600;">+$548,045.00 (+44%)</span>
+                                </div>
                             </div>
                             <div>
                                 <div class="notice-card">
@@ -488,7 +491,7 @@
                                 <p id="processingStatus">Validating transfer information…</p>
                             </div>
 
-                            <!-- STEP 5: SUCCESS / PENDING APPROVAL (NEW) -->
+                            <!-- STEP 5: SUCCESS / PENDING APPROVAL -->
                             <div id="transferStepPending" class="hidden">
                                 <div class="success-wrap">
                                     <div class="success-icon"><i class="fas fa-check-circle"></i></div>
@@ -524,12 +527,12 @@
         let savingsBalance = 234567.00;
 
         const transactions = [
-            { id: 1, date: 'Aug 12', desc: 'Investment Income', category: 'Income', amount: 18750.00, type: 'income', status: 'Completed' },
+            { id: 1, date: 'Aug 12', desc: 'Realized Gain / Dividend', category: 'Income', amount: 18750.00, type: 'income', status: 'Completed' },
             { id: 2, date: 'Aug 10', desc: 'Investment Distribution', category: 'Income', amount: 32500.00, type: 'income', status: 'Completed' },
             { id: 3, date: 'Aug 8', desc: 'Capital Allocation', category: 'Transfer', amount: 10000.00, type: 'expense', status: 'Completed' },
-            { id: 4, date: 'Aug 6', desc: 'Investment Deposit', category: 'Income', amount: 8000.00, type: 'income', status: 'Completed' },
+            { id: 4, date: 'Aug 6', desc: 'Capital Contribution', category: 'Income', amount: 8000.00, type: 'income', status: 'Completed' },
             { id: 5, date: 'Aug 4', desc: 'Fund Deposit', category: 'Income', amount: 4000.00, type: 'income', status: 'Completed' },
-            { id: 6, date: 'Aug 1', desc: 'Capital Deduction', category: 'Investment', amount: 15000.00, type: 'expense', status: 'Completed' },
+            { id: 6, date: 'Aug 1', desc: 'Management Fee / Withdrawal', category: 'Investment', amount: 15000.00, type: 'expense', status: 'Completed' },
             { id: 7, date: 'Jul 29', desc: 'Insurance Premium', category: 'Insurance', amount: 1480.00, type: 'expense', status: 'Completed' },
             { id: 8, date: 'Jul 26', desc: 'Property Payment', category: 'Housing', amount: 6850.00, type: 'expense', status: 'Completed' },
             { id: 9, date: 'Jul 23', desc: 'Online Shopping', category: 'Shopping', amount: 742.19, type: 'expense', status: 'Completed' },
